@@ -1,0 +1,19 @@
+---
+- name: Install cups
+  become: true
+  apt:
+    name: cups
+    state: present
+
+- name: Install smbclient
+  become: true
+  apt:
+    name: smbclient
+    state: present
+
+- name: Install printer-driver-fujixerox
+  become: true
+  apt:
+    name: printer-driver-fujixerox
+    state: present
+

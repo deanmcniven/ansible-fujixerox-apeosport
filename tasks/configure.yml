@@ -1,0 +1,45 @@
+---
+- name: Stop Cups Daemon
+  become: true
+  systemd:
+    name: cups
+    state: stopped
+  when: update_printer_conf
+
+- name: Copy printers config
+  become: true
+  template:
+    src: printers.conf.j2
+    dest: /etc/cups/printers.conf
+    owner: root
+    group: lp
+    mode: 0644
+  when: update_printer_conf
+
+- name: Start Cups Daemon
+  become: true
+  systemd:
+    name: cups
+    state: started
+  when: update_printer_conf
+
+- name: Copy Secureprint PPD
+  become: true
+  notify: Restart Cups Daemon
+  copy:
+    src: files/SecurePrint.ppd
+    dest: /etc/cups/ppd/SecurePrint.ppd
+    owner: root
+    group: lp
+    mode: 0644
+
+- name: Copy FX-ApeosPort PPD
+  become: true
+  notify: Restart Cups Daemon
+  copy:
+    src: files/FX-ApeosPort-IV-C3375.ppd
+    dest: /etc/cups/ppd/FX-ApeosPort-IV-C3375.ppd
+    owner: root
+    group: lp
+    mode: 0644
+

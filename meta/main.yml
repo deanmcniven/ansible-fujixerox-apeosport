@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  author: Dean McNiven
+  description: ansible-fujixerox-apeosport
+  license: MIT
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+dependencies: []
+

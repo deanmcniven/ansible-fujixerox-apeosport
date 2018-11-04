@@ -1,0 +1,29 @@
+---
+- name: Is there a printers.conf file
+  become: true
+  stat:
+    path: /etc/cups/printers.conf
+  register: printers_conf_file
+  changed_when: false
+
+- name: Contents of printers.conf file
+  become: true
+  shell: cat /etc/cups/printers.conf
+  register: printers_conf_contents
+  when: printers_conf_file.stat.exists
+  changed_when: false
+
+- name: Should update printer.conf
+  become: false
+  set_fact:
+    update_printer_conf: true
+  when: not printers_conf_file.stat.exists or (printers_conf_contents.stdout.find('<DefaultPrinter SecurePrint>') == -1)
+  changed_when: false
+
+- name: Should NOT update printer.conf
+  become: false
+  set_fact:
+    update_printer_conf: false
+  when: printers_conf_file.stat.exists and (printers_conf_contents.stdout.find('<DefaultPrinter SecurePrint>') != -1)
+  changed_when: false
+

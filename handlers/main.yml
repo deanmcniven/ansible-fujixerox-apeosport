@@ -1,0 +1,7 @@
+---
+- name: Restart Cups Daemon
+  become: true
+  systemd:
+    name: cups
+    state: restarted
+
